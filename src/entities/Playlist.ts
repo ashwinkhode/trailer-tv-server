@@ -16,13 +16,13 @@ import {
 export class Playlist {
   @Field()
   @PrimaryGeneratedColumn()
-  playlistId!: number;
+  playlistId!: string;
 
   @Field()
-  @Column()
+  @Column({ unique: true })
   playlistName: string;
 
-  @ManyToMany(() => Video)
+  @ManyToMany(() => Video, (video) => video.playlists)
   @JoinTable()
   videos: Video[];
 

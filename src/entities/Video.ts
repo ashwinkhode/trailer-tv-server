@@ -1,10 +1,18 @@
+import { Playlist } from './Playlist';
 import { ObjectType, Field } from 'type-graphql';
-import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @ObjectType()
 @Entity()
 export class Video extends BaseEntity {
-
   @Field()
   @PrimaryGeneratedColumn()
   videoId!: string;
@@ -36,4 +44,8 @@ export class Video extends BaseEntity {
   @Field()
   @Column()
   thumbnail_url: string;
+
+  @Field(() => [Playlist], { defaultValue: [] })
+  @ManyToMany(() => Playlist, (playlist) => playlist.videos)
+  playlists: Playlist[];
 }
