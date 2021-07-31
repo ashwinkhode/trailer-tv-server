@@ -1,7 +1,15 @@
-import { Playlist } from './../entities/Playlist';
+import { DeleteResult } from 'typeorm';
 import { MyContext } from '../../types';
 import { Video } from '../entities/Video';
-import { Arg, Field, InputType, Int, Mutation, Resolver } from 'type-graphql';
+import {
+  Arg,
+  Authorized,
+  Field,
+  InputType,
+  Int,
+  Mutation,
+  Resolver,
+} from 'type-graphql';
 import { Ctx, Query } from 'type-graphql';
 
 @InputType()
@@ -23,32 +31,27 @@ class VideoInput {
 
   @Field()
   thumbnail_url: string;
-}
-
-@InputType()
-class AddToPlaylistInput {
-  @Field()
-  videoId: string;
 
   @Field()
-  playlistId: string;
+  category: string;
 }
 
 @Resolver()
 export class VideoResolver {
   @Query(() => [Video], { nullable: true })
-  videos(@Ctx() { em }: MyContext): Promise<Video[]> {
-    return em.find(Video, {});
+  async videos(@Ctx() { em }: MyContext): Promise<Video[]> {
+    return await em.find(Video, {});
   }
 
   @Query(() => Video, { nullable: true })
-  video(
+  async video(
     @Arg('videoId', () => String) videoId: string,
     @Ctx() { em }: MyContext,
   ): Promise<Video | undefined> {
-    return em.findOne(Video, { videoId });
+    return await em.findOne(Video, { videoId });
   }
 
+  @Authorized('REGULAR')
   @Mutation(() => Video, { nullable: true })
   addVideo(@Arg('inputData') inputData: VideoInput): Promise<Video> {
     return Video.create({
@@ -57,23 +60,12 @@ export class VideoResolver {
     }).save();
   }
 
-  @Mutation(() => Video)
-  async addToPlaylist(
-    @Arg('inputData') inputData: AddToPlaylistInput,
+  @Authorized('REGULAR')
+  @Mutation(() => Video, { nullable: true })
+  async removeDelete(
+    @Arg('videoId') videoId: string,
     @Ctx() { em }: MyContext,
-  ): Promise<Playlist | undefined> {
-    const requiredPlaylist = await em.findOne(Playlist, {
-      playlistId: inputData.playlistId,
-    });
-    const requiredVideo = await em.findOne(Video, {
-      videoId: inputData.videoId,
-    });
-
-    if (requiredPlaylist && requiredVideo) {
-      requiredPlaylist.videos = [...requiredPlaylist.videos, requiredVideo];
-      return await em.save(requiredPlaylist);
-    }
-
-    return requiredPlaylist;
+  ): Promise<DeleteResult> {
+    return await em.delete(Video, videoId);
   }
 }

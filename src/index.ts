@@ -1,3 +1,5 @@
+import { authChecker } from './utils/authChecker';
+import { PlaylistResolver } from './resolvers/playlistResolver';
 import { MyContext } from './../types.d';
 import { UserResolver } from './resolvers/userResolver';
 import { VideoResolver } from './resolvers/videoResolver';
@@ -47,8 +49,14 @@ createConnection()
 
     const apolloServer = new ApolloServer({
       schema: await buildSchema({
-        resolvers: [HelloResolver, VideoResolver, UserResolver],
+        resolvers: [
+          HelloResolver,
+          VideoResolver,
+          UserResolver,
+          PlaylistResolver,
+        ],
         validate: false,
+        authChecker,
       }),
       context: ({ req, res }): MyContext => ({
         em: getManager(),
