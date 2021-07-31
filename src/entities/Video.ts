@@ -5,7 +5,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinTable,
   ManyToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -44,6 +43,10 @@ export class Video extends BaseEntity {
   @Field()
   @Column()
   thumbnail_url: string;
+
+  @Field()
+  @Column({ nullable: true })
+  category: string;
 
   @Field(() => [Playlist], { defaultValue: [] })
   @ManyToMany(() => Playlist, (playlist) => playlist.videos)

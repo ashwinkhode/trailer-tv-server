@@ -22,6 +22,7 @@ export class Playlist {
   @Column({ unique: true })
   playlistName: string;
 
+  @Field(() => [Video], { nullable: true, defaultValue: [] })
   @ManyToMany(() => Video, (video) => video.playlists)
   @JoinTable()
   videos: Video[];
