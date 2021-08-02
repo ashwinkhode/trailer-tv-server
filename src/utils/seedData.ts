@@ -299,6 +299,7 @@ export const allVideos = [
 
 export default async function seedData() {
   console.log('Beginning dbseed task.');
+  console.log('DB URL', process.env.DATABASE_URL);
 
   const conn = await createConnection({
     type: 'postgres',
