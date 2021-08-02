@@ -303,21 +303,11 @@ export default async function seedData() {
   const conn = await createConnection({
     type: 'postgres',
     url: process.env.DATABASE_URL,
-    synchronize: true,
-    logging: process.env.NODE_ENV === 'development',
     ssl: true,
     extra: {
       ssl: {
         rejectUnauthorized: false,
       },
-    },
-    entities: ['dist/entities/*.js'],
-    subscribers: ['dist/subscribers/*.js'],
-    migrations: ['dist/migrations/*.js'],
-    cli: {
-      entitiesDir: 'src/entities',
-      migrationsDir: 'src/migrations',
-      subscribersDir: 'src/subscribers',
     },
   });
   console.log('PG connected.');
