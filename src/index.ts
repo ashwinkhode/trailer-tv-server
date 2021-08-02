@@ -80,6 +80,10 @@ createConnection()
       },
     });
 
-    app.listen(4000, () => console.log('Server started on localhost:4000'));
+    app.listen(process.env.PORT, () =>
+      console.log(
+        'Server started on' + process.env.DOMAIN_URL + process.env.PORT,
+      ),
+    );
   })
   .catch((err) => console.error(err));
