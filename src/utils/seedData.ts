@@ -302,8 +302,7 @@ export default async function seedData() {
 
   const conn = await createConnection({
     type: 'postgres',
-    url: 'postgres://jumlqweilkujqh:114e74edcf40bcfef230d2ac6106052d22833fdafa4899f3dc29f4948162daa8@ec2-44-194-54-123.compute-1.amazonaws.com:5432/d10v00csm3e52v',
-    name: 'd10v00csm3e52v',
+    url: process.env.DATABASE_URL,
     ssl: true,
     extra: {
       ssl: {
@@ -337,9 +336,8 @@ export default async function seedData() {
       video.videoId = videoId;
       video.thumbnail_url = thumbnailURL;
 
-      const videoRepo = conn.getRepository(Video);
-      video = await videoRepo.save(video); // re-assign to know assigned id
-      console.log(`Video saved. id = ${video.videoId}`);
+      const newVideo = await conn.manager.create(Video, video).save(); // re-assign to know assigned id
+      console.log(`Video saved. id = ${newVideo.videoId}`);
     },
   );
 
