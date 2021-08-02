@@ -7,7 +7,7 @@
     "start": "node .",
     "watch": "tsc -w",
     "build": "npm-run-all clean runtsc",
-    "runtsc": "npm run tsc",
+    "runtsc": "tsc",
     "clean": "rm -rf dist/*",
     "dbseed": "npm build && node dist/utils/seedData.js",
     "prestart": "npm run build",
