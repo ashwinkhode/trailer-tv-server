@@ -302,7 +302,8 @@ export default async function seedData() {
 
   const conn = await createConnection({
     type: 'postgres',
-    url: process.env.DATABASE_URL,
+    url: 'postgres://jumlqweilkujqh:114e74edcf40bcfef230d2ac6106052d22833fdafa4899f3dc29f4948162daa8@ec2-44-194-54-123.compute-1.amazonaws.com:5432/d10v00csm3e52v',
+    name: 'd10v00csm3e52v',
     ssl: true,
     extra: {
       ssl: {
