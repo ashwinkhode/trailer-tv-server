@@ -7,8 +7,9 @@
     "start": "node dist/index.js",
     "watch": "tsc -w",
     "build": "tsc",
-    "dbseed": "yarn build && node dist/utils/seedData.js",
-    "dev": "nodemon dist/index.js"
+    "dbseed": "npm build && node dist/utils/seedData.js",
+    "dev": "nodemon dist/index.js",
+    "heroku-postbuild": "npm install --production"
   },
   "devDependencies": {
     "@types/connect-redis": "^0.0.16",
