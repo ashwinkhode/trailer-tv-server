@@ -1,25 +1,32 @@
-import { authChecker } from './utils/authChecker';
-import { PlaylistResolver } from './resolvers/playlistResolver';
-import { MyContext } from './../types.d';
-import { UserResolver } from './resolvers/userResolver';
-import { VideoResolver } from './resolvers/videoResolver';
-import 'reflect-metadata';
-import { createConnection, getManager } from 'typeorm';
-import express from 'express';
-import { HelloResolver } from './resolvers/helloResolver';
+import dotenv from 'dotenv-safe';
 import { ApolloServer } from 'apollo-server-express';
-import { buildSchema } from 'type-graphql';
 import connectRedis from 'connect-redis';
+import cors from 'cors';
+import express from 'express';
 import expressSession from 'express-session';
 import Redis from 'ioredis';
-import cors from 'cors';
+import 'reflect-metadata';
+import { buildSchema } from 'type-graphql';
+import { createConnection, getManager } from 'typeorm';
+import { MyContext } from './../types.d';
+import { HelloResolver } from './resolvers/helloResolver';
+import { PlaylistResolver } from './resolvers/playlistResolver';
+import { UserResolver } from './resolvers/userResolver';
+import { VideoResolver } from './resolvers/videoResolver';
+import { authChecker } from './utils/authChecker';
+
+dotenv.config();
 
 createConnection()
   .then(async (_connection) => {
     const app = express();
 
     const RedisStore = connectRedis(expressSession);
-    const redisClient = new Redis();
+    const redisClient = new Redis({
+      port: parseInt(process.env.REDIS_PORT!),
+      host: process.env.REDIS_HOSTNAME,
+      password: process.env.REDIS_PASSWORD,
+    });
 
     app.use(
       cors({
