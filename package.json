@@ -8,7 +8,7 @@
     "watch": "tsc -w",
     "build": "tsc",
     "clean": "rm -rf dist/*",
-    "dbseed": "node dist/utils/seedData.js",
+    "dbseed": "node dist/seedData.js",
     "dev": "nodemon dist/index.js",
     "migrate:create": "npm run typeorm migration:create -n PostRefactoring",
     "migrate:run": "npm run typeorm migration:run",

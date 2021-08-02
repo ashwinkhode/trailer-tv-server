@@ -14,7 +14,6 @@ import { PlaylistResolver } from './resolvers/playlistResolver';
 import { UserResolver } from './resolvers/userResolver';
 import { VideoResolver } from './resolvers/videoResolver';
 import { authChecker } from './utils/authChecker';
-import seedData from './utils/seedData';
 
 dotenv.config();
 

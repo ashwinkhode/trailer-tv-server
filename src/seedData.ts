@@ -1,8 +1,8 @@
 import { createConnection } from 'typeorm';
-import { Video } from './../entities/Video';
+import { Video } from './entities/Video';
 import 'reflect-metadata';
 //@ts-ignore
-import config from '../../ormconfig.js';
+import config from '../ormconfig.js';
 
 type MetadataType = {
   videoId: string;
