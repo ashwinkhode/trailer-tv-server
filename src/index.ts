@@ -66,6 +66,7 @@ createConnection()
         authChecker,
       }),
       playground: true,
+      introspection: true,
       context: ({ req, res }): MyContext => ({
         em: getManager(),
         req,
