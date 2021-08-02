@@ -1,11 +1,6 @@
 import { Video } from './../entities/Video';
 import 'reflect-metadata';
-import {
-  createConnection,
-  EntityManager,
-  getConnection,
-  getConnectionManager,
-} from 'typeorm';
+import { Connection } from 'typeorm';
 
 type MetadataType = {
   videoId: string;
@@ -302,10 +297,9 @@ export const allVideos = [
   ...trendingData,
 ];
 
-export default async function seedData() {
+export default async function seedData(conn: Connection) {
   console.log('Beginning dbseed task.');
 
-  const conn = getConnection();
   console.log('PG connected.');
 
   // Create seed data.
