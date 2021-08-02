@@ -15,9 +15,9 @@ module.exports = {
       rejectUnauthorized: false,
     },
   },
-  entities: ['**/entities/*.{ts,js}'],
-  subscribers: ['**/subscribers/*.{ts,js}'],
-  migrations: ['**/migrations/*.{ts,js}'],
+  entities: ['**/entities/*.js}'],
+  subscribers: ['**/subscribers/*.js}'],
+  migrations: ['**/migrations/*.js}'],
   cli: {
     entitiesDir: 'src/entities',
     migrationsDir: 'src/migrations',
