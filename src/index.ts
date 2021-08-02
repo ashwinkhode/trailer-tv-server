@@ -17,6 +17,8 @@ import { authChecker } from './utils/authChecker';
 
 dotenv.config();
 
+console.log(__dirname);
+
 createConnection()
   .then(async (_connection) => {
     const app = express();
