@@ -297,7 +297,7 @@ export const allVideos = [
   ...trendingData,
 ];
 
-(async () => {
+export default async function seedData() {
   console.log('Beginning dbseed task.');
 
   const conn = await createConnection({
@@ -355,4 +355,4 @@ export const allVideos = [
   console.log('PG connection closed.');
 
   console.log('Finished dbseed task.');
-})().catch((err) => console.log(err));
+}

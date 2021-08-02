@@ -14,12 +14,15 @@ import { PlaylistResolver } from './resolvers/playlistResolver';
 import { UserResolver } from './resolvers/userResolver';
 import { VideoResolver } from './resolvers/videoResolver';
 import { authChecker } from './utils/authChecker';
+import seedData from './utils/seedData';
 
 dotenv.config();
 
 createConnection()
   .then(async (_connection) => {
     const app = express();
+
+    seedData().catch((err) => console.log(err));
 
     const RedisStore = connectRedis(expressSession);
     const redisClient = new Redis({
