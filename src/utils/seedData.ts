@@ -1,6 +1,9 @@
+import dotenv from 'dotenv-safe';
 import { Video } from './../entities/Video';
 import 'reflect-metadata';
 import { createConnection } from 'typeorm';
+
+dotenv.config();
 
 type MetadataType = {
   videoId: string;
