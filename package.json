@@ -6,8 +6,8 @@
   "scripts": {
     "start": "node .",
     "watch": "tsc -w",
-    "build": "npm-run-all clean tsc",
-    "tsc": "npm run tsc",
+    "build": "npm-run-all clean runtsc",
+    "runtsc": "npm run tsc",
     "clean": "rm -rf dist/*",
     "dbseed": "npm build && node dist/utils/seedData.js",
     "prestart": "npm run build",
