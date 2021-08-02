@@ -116,7 +116,7 @@ export class UserResolver {
         .create(User, {
           email: userInput.email,
           password: hashedPassword,
-          playlists: null,
+          playlists: [],
         } as any)
         .save();
     } catch (err) {
@@ -134,7 +134,7 @@ export class UserResolver {
         errors: [
           {
             field: 'password',
-            message: err.detail,
+            message: err.message,
           },
         ],
       };
