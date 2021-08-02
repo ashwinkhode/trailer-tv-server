@@ -1,6 +1,8 @@
 import { createConnection } from 'typeorm';
 import { Video } from './../entities/Video';
 import 'reflect-metadata';
+//@ts-ignore
+import config from '../../ormconfig.js';
 
 type MetadataType = {
   videoId: string;
@@ -299,7 +301,8 @@ export const allVideos = [
 
 export default async function seedData() {
   console.log('Beginning dbseed task.');
-  console.log('DB URL', process.env.DATABASE_URL);
+  console.log('dirname', __dirname);
+  console.log('env vars', config);
 
   const conn = await createConnection({
     type: 'postgres',
