@@ -300,7 +300,24 @@ export const allVideos = [
 (async () => {
   console.log('Beginning dbseed task.');
 
-  const conn = await createConnection();
+  const conn = await createConnection({
+    type: 'postgres',
+    url: process.env.DATABASE_URL,
+    ssl: true,
+    extra: {
+      ssl: {
+        rejectUnauthorized: false,
+      },
+    },
+    entities: ['dist/entities/*.js'],
+    subscribers: ['dist/subscribers/*.js'],
+    migrations: ['dist/migrations/*.js'],
+    cli: {
+      entitiesDir: 'src/entities',
+      migrationsDir: 'src/migrations',
+      subscribersDir: 'src/subscribers',
+    },
+  });
   console.log('PG connected.');
 
   // Create seed data.
@@ -338,4 +355,4 @@ export const allVideos = [
   console.log('PG connection closed.');
 
   console.log('Finished dbseed task.');
-})();
+})().catch((err) => console.log(err));
