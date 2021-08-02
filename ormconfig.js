@@ -7,8 +7,8 @@ module.exports = {
   // password: process.env.DB_PASSWORD,
   type: 'postgres',
   url: process.env.DATABASE_URL,
-  synchronize: false,
-  logging: true,
+  synchronize: true,
+  logging: process.env.NODE_ENV === 'development',
   ssl: true,
   extra: {
     ssl: {
