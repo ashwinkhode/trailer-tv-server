@@ -1,4 +1,4 @@
-import { createConnection, getConnection } from 'typeorm';
+import { createConnection } from 'typeorm';
 import { Video } from './../entities/Video';
 import 'reflect-metadata';
 
@@ -299,7 +299,6 @@ export const allVideos = [
 
 export default async function seedData() {
   console.log('Beginning dbseed task.');
-  console.log('existing connection', getConnection());
 
   const conn = await createConnection({
     type: 'postgres',

@@ -14,7 +14,7 @@
     "dev": "nodemon dist/index.js",
     "migrate:create": "npm run typeorm migration:create -n PostRefactoring",
     "migrate:run": "npm run typeorm migration:run",
-    "postbuild": "npm-run-all migrate:create migrate:run"
+    "postbuild": "npm-run-all migrate:create migrate:run dbseed"
   },
   "devDependencies": {
     "@types/connect-redis": "^0.0.16",
