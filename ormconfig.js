@@ -9,6 +9,12 @@ module.exports = {
   url: process.env.DATABASE_URL,
   synchronize: false,
   logging: true,
+  ssl: true,
+  extra: {
+    ssl: {
+      rejectUnauthorized: false,
+    },
+  },
   entities: ['dist/entities/*.js'],
   subscribers: ['dist/subscribers/*.js'],
   migrations: ['dist/migrations/*.js'],
