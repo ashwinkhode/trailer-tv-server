@@ -22,8 +22,6 @@ createConnection()
   .then(async (_connection) => {
     const app = express();
 
-    await seedData(_connection).catch((err) => console.log(err));
-
     const RedisStore = connectRedis(expressSession);
     const redisClient = new Redis({
       port: parseInt(process.env.REDIS_PORT!),

@@ -1,6 +1,6 @@
+import { createConnection, getConnection } from 'typeorm';
 import { Video } from './../entities/Video';
 import 'reflect-metadata';
-import { Connection } from 'typeorm';
 
 type MetadataType = {
   videoId: string;
@@ -297,9 +297,30 @@ export const allVideos = [
   ...trendingData,
 ];
 
-export default async function seedData(conn: Connection) {
+export default async function seedData() {
   console.log('Beginning dbseed task.');
+  console.log('existing connection', getConnection());
 
+  const conn = await createConnection({
+    type: 'postgres',
+    url: process.env.DATABASE_URL,
+    synchronize: true,
+    logging: process.env.NODE_ENV === 'development',
+    ssl: true,
+    extra: {
+      ssl: {
+        rejectUnauthorized: false,
+      },
+    },
+    entities: ['dist/entities/*.js'],
+    subscribers: ['dist/subscribers/*.js'],
+    migrations: ['dist/migrations/*.js'],
+    cli: {
+      entitiesDir: 'src/entities',
+      migrationsDir: 'src/migrations',
+      subscribersDir: 'src/subscribers',
+    },
+  });
   console.log('PG connected.');
 
   // Create seed data.
@@ -338,3 +359,7 @@ export default async function seedData(conn: Connection) {
 
   console.log('Finished dbseed task.');
 }
+
+seedData()
+  .then((_) => console.log('Successfully Seeded'))
+  .catch((err) => console.log(err));
