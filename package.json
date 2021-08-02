@@ -11,8 +11,7 @@
     "clean": "rm -rf dist/*",
     "dbseed": "npm build && node dist/utils/seedData.js",
     "prestart": "npm run build",
-    "dev": "nodemon dist/index.js",
-    "heroku-postbuild": "npm install --production"
+    "dev": "nodemon dist/index.js"
   },
   "devDependencies": {
     "@types/connect-redis": "^0.0.16",
