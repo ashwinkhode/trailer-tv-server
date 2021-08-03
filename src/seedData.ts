@@ -1,4 +1,4 @@
-import { createConnection } from 'typeorm';
+import { createConnection, EntityManager } from 'typeorm';
 import { Video } from './entities/Video';
 import 'reflect-metadata';
 //@ts-ignore
@@ -299,10 +299,8 @@ export const allVideos = [
   ...trendingData,
 ];
 
-export default async function seedData() {
-  console.log(config);
-  const conn = await createConnection(config);
-  console.log('PG connected.', process.cwd());
+export default async function seedData(em: EntityManager) {
+  console.log('PG connected.');
 
   // Create seed data.
   allVideos.map(
@@ -328,18 +326,13 @@ export default async function seedData() {
       video.videoId = videoId;
       video.thumbnail_url = thumbnailURL;
 
-      const newVideo = await conn.manager.create(Video, video).save(); // re-assign to know assigned id
+      const newVideo = await em.create(Video, video).save(); // re-assign to know assigned id
       console.log(`Video saved. id = ${newVideo.videoId}`);
     },
   );
 
   // Close connection
-  await conn.close();
   console.log('PG connection closed.');
 
   console.log('Finished dbseed task.');
 }
-
-seedData()
-  .then((_) => console.log('Successfully Seeded'))
-  .catch((err) => console.log(err));

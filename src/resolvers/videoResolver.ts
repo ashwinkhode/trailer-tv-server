@@ -11,6 +11,7 @@ import {
   Resolver,
 } from 'type-graphql';
 import { Ctx, Query } from 'type-graphql';
+import seedData from '../seedData';
 
 @InputType()
 class VideoInput {
@@ -67,5 +68,14 @@ export class VideoResolver {
     @Ctx() { em }: MyContext,
   ): Promise<DeleteResult> {
     return await em.delete(Video, videoId);
+  }
+
+  @Authorized('REGULAR')
+  @Mutation(() => [Video], { nullable: true })
+  async seedVideos(@Ctx() { em }: MyContext): Promise<Video[]> {
+    seedData(em)
+      .then((_) => console.log('Successfully Seeded'))
+      .catch((err) => console.log(err));
+    return await em.find(Video, {});
   }
 }

@@ -15,7 +15,9 @@ import { UserResolver } from './resolvers/userResolver';
 import { VideoResolver } from './resolvers/videoResolver';
 import { authChecker } from './utils/authChecker';
 
-dotenv.config();
+dotenv.config({
+  allowEmptyValues: true,
+});
 
 createConnection()
   .then(async (_connection) => {
