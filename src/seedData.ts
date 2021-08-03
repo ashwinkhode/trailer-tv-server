@@ -300,20 +300,7 @@ export const allVideos = [
 ];
 
 export default async function seedData() {
-  console.log('Beginning dbseed task.');
-  console.log('dirname', __dirname);
-  console.log('env vars', config);
-
-  const conn = await createConnection({
-    type: 'postgres',
-    url: process.env.DATABASE_URL,
-    ssl: true,
-    extra: {
-      ssl: {
-        rejectUnauthorized: false,
-      },
-    },
-  });
+  const conn = await createConnection(config);
   console.log('PG connected.');
 
   // Create seed data.
