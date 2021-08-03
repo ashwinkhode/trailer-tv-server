@@ -300,8 +300,9 @@ export const allVideos = [
 ];
 
 export default async function seedData() {
+  console.log(config);
   const conn = await createConnection(config);
-  console.log('PG connected.');
+  console.log('PG connected.', process.cwd());
 
   // Create seed data.
   allVideos.map(
