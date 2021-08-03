@@ -314,19 +314,29 @@ export default async function seedData(em: EntityManager) {
       category,
       videoId,
     }) => {
-      let video = new Video();
-      video.title = title;
-      video.category = category;
-      video.channel = channel;
-      video.dislikes = dislikes;
-      video.likes = likes;
-      video.playlists = [];
-      video.uploadedAt = new Date();
-      video.views = views;
-      video.videoId = videoId;
-      video.thumbnail_url = thumbnailURL;
+      // video.title = title;
+      // video.category = category;
+      // video.channel = channel;
+      // video.dislikes = dislikes;
+      // video.likes = likes;
+      // video.playlists = [];
+      // video.uploadedAt = new Date();
+      // video.views = views;
+      // video.videoId = videoId;
+      // video.thumbnail_url = thumbnailURL;
 
-      const newVideo = await em.create(Video, video).save(); // re-assign to know assigned id
+      const newVideo = await em
+        .create(Video, {
+          title,
+          views,
+          likes,
+          dislikes,
+          channel,
+          thumbnail_url: thumbnailURL,
+          category,
+          videoId,
+        })
+        .save(); // re-assign to know assigned id
       console.log(`Video saved. id = ${newVideo.videoId}`);
     },
   );
