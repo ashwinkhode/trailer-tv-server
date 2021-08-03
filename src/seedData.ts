@@ -334,7 +334,6 @@ export default async function seedData(em: EntityManager) {
           channel,
           thumbnail_url: thumbnailURL,
           category,
-          videoId,
         })
         .save(); // re-assign to know assigned id
       console.log(`Video saved. id = ${newVideo.videoId}`);
