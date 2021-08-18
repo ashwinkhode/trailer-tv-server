@@ -8,7 +8,7 @@ import Redis from 'ioredis';
 import 'reflect-metadata';
 import { buildSchema } from 'type-graphql';
 import { createConnection, getManager } from 'typeorm';
-import { MyContext } from './../types.d';
+import { MyContext } from '../types';
 import { HelloResolver } from './resolvers/helloResolver';
 import { PlaylistResolver } from './resolvers/playlistResolver';
 import { UserResolver } from './resolvers/userResolver';
@@ -18,6 +18,8 @@ import { authChecker } from './utils/authChecker';
 dotenv.config({
   allowEmptyValues: true,
 });
+
+console.log('ENVIRONEMENT: ', process.env.NODE_ENV);
 
 createConnection()
   .then(async (_connection) => {
@@ -79,14 +81,14 @@ createConnection()
     apolloServer.applyMiddleware({
       app,
       cors: {
-        origin: process.env.DOMAIN_URL,
+        origin: 'https://trailer-tv.vercel.app',
         credentials: true,
       },
     });
 
     app.listen(process.env.PORT, () =>
       console.log(
-        'Server started on' + process.env.DOMAIN_URL + process.env.PORT,
+        'Server started on ' + process.env.DOMAIN_URL + ' ' + process.env.PORT,
       ),
     );
   })
