@@ -34,7 +34,7 @@ createConnection()
 
     app.use(
       cors({
-        origin: process.env.DOMAIN_URL,
+        origin: 'https://trailer-tv.vercel.app/',
         credentials: true,
       }),
     );
@@ -80,10 +80,10 @@ createConnection()
 
     apolloServer.applyMiddleware({
       app,
-      cors: {
-        origin: 'https://trailer-tv.vercel.app',
-        credentials: true,
-      },
+      // cors: {
+      //   origin: 'https://trailer-tv.vercel.app',
+      //   credentials: true,
+      // },
     });
 
     app.listen(process.env.PORT, () =>
