@@ -1,13 +1,16 @@
 import { GraphQLResolveInfo } from 'graphql';
-import { ClassType } from './ClassType';
-import { ResolverData } from './ResolverData';
 import { Request, Response } from 'express';
 import { EntityManager } from 'typeorm';
 import { User } from 'src/entities/User';
+import { Session } from 'express-session';
+
+export type SessionType = {
+  userId?: string;
+};
 
 export type MyContext = {
   em: EntityManager;
-  req: Request & { session: Express.Request.session };
+  req: Request & { session: SessionType };
   res: Response;
 };
 
@@ -38,12 +41,8 @@ export type AuthCheckerInterface<TContextType = {}, TRoleType = string> = {
   ): boolean | Promise<boolean>;
 };
 
-export type AuthChecker<TContextType = {}, TRoleType = string> =
-  | AuthCheckerFn<TContextType, TRoleType>
-  | ClassType<AuthCheckerInterface<TContextType, TRoleType>>;
-
 export type AuthMode = 'error' | 'null';
 
-export interface Context {
+export interface AuthContext {
   user?: User;
 }

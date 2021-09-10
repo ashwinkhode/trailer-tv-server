@@ -10,8 +10,9 @@
     "clean": "rm -rf dist/*",
     "dbseed": "node dist/seedData.js",
     "dev": "nodemon dist/index.js",
-    "migrate:create": "npm run typeorm migration:create -n PostRefactoring",
-    "migrate:run": "npm run typeorm migration:run",
+    "dev2": "ts-node-dev --respawn src/index.ts",
+    "migrate:create": "typeorm migration:create -n PostRefactoring",
+    "migrate:run": "typeorm migration:run",
     "postbuild": "npm-run-all migrate:create migrate:run",
     "prebuild": "rm -rf dist/*"
   },
@@ -28,6 +29,7 @@
     "@types/uuid": "^8.3.0",
     "nodemon": "^2.0.7",
     "ts-node": "^10.0.0",
+    "ts-node-dev": "^1.1.8",
     "typescript": "^4.3.2"
   },
   "dependencies": {

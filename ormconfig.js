@@ -9,7 +9,7 @@ module.exports = {
   url: process.env.DATABASE_URL,
   synchronize: true,
   logging: process.env.NODE_ENV === 'development',
-  ssl: true,
+  ssl: process.env.NODE_ENV !== 'development',
   extra: {
     ssl: {
       rejectUnauthorized: false,
