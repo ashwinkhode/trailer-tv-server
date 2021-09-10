@@ -1,11 +1,12 @@
 import { User } from '../entities/User';
-import { Context, MyContext } from './../../types.d';
-import { AuthChecker } from 'types';
+import { MyContext } from '../../types';
 
-export const authChecker: AuthChecker<Context> = async (
-  { context: { em, req } }: { context: MyContext },
+export const authChecker = async (
+  { context }: { context: MyContext },
   roles: string[],
 ) => {
+  const { em, req } = context;
+
   const user = await em.findOne(User, {
     where: {
       userId: req.session.userId,
