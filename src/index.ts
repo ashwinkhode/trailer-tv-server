@@ -19,7 +19,10 @@ dotenv.config({
   allowEmptyValues: true,
 });
 
-console.log('ENVIRONEMENT: ', process.env.NODE_ENV);
+const CORS_SITES =
+  process.env.NODE_ENV === 'production'
+    ? 'https://trailer-tv.vercel.app'
+    : 'http://localhost:3000';
 
 createConnection()
   .then(async (_connection) => {
@@ -32,9 +35,18 @@ createConnection()
       password: process.env.REDIS_PASSWORD,
     });
 
+    // Apollo Bug - Overwriting Header
     app.use(
+      function (req, res, next) {
+        res.header('Access-Control-Allow-Origin', CORS_SITES);
+        res.header(
+          'Access-Control-Allow-Headers',
+          'Origin, X-Requested-With, Content-Type, Accept',
+        );
+        next();
+      },
       cors({
-        origin: 'https://trailer-tv.vercel.app/',
+        origin: CORS_SITES,
         credentials: true,
       }),
     );
@@ -80,10 +92,7 @@ createConnection()
 
     apolloServer.applyMiddleware({
       app,
-      // cors: {
-      //   origin: 'https://trailer-tv.vercel.app',
-      //   credentials: true,
-      // },
+      cors: false,
     });
 
     app.listen(process.env.PORT, () =>
