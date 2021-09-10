@@ -63,7 +63,7 @@ export class VideoResolver {
 
   @Authorized('REGULAR')
   @Mutation(() => Video, { nullable: true })
-  async removeDelete(
+  async removeVideo(
     @Arg('videoId') videoId: string,
     @Ctx() { em }: MyContext,
   ): Promise<DeleteResult> {

@@ -1,5 +1,5 @@
 import { User } from './../entities/User';
-import { MyContext } from './../../types.d';
+import { MyContext } from '../../types';
 import { Playlist } from './../entities/Playlist';
 import {
   Mutation,
@@ -11,7 +11,6 @@ import {
   Query,
   Authorized,
 } from 'type-graphql';
-import { DeleteResult } from 'typeorm';
 import { Video } from '../entities/Video';
 
 @InputType()
@@ -29,18 +28,25 @@ class PlaylistOperationInput {
   videoId?: string;
 }
 
+type TDeleteResult = {
+  success: boolean;
+};
+
 @Resolver()
 export class PlaylistResolver {
   @Query(() => [Playlist])
   async playlists(@Ctx() { em }: MyContext): Promise<Playlist[]> {
-    const allPlaylists = await em.find(Playlist, {});
-
-    return allPlaylists;
+    return await em.find(Playlist, {
+      relations: ['user'],
+    });
   }
 
-  @Authorized('REGULAR')
   @Query(() => [Playlist])
   async myPlaylists(@Ctx() { em, req }: MyContext): Promise<Playlist[]> {
+    if (!req.session.userId) {
+      throw new Error('Please login to view your playlists');
+    }
+
     const allPlaylists = await em.find(Playlist, {
       where: {
         user: await em.findOne(User, {
@@ -49,12 +55,12 @@ export class PlaylistResolver {
           },
         }),
       },
+      relations: ['videos'],
     });
 
     return allPlaylists;
   }
 
-  @Authorized('REGULAR')
   @Query(() => Playlist)
   async playlist(
     @Arg('playlistId') playlistId: string,
@@ -64,7 +70,7 @@ export class PlaylistResolver {
       where: {
         playlistId,
       },
-      relations: ['videos'],
+      relations: ['videos', 'user'],
     });
 
     if (!requiredPlaylist) {
@@ -120,8 +126,15 @@ export class PlaylistResolver {
       requiredVideo &&
       requiredPlaylist.user.userId === req.session.userId
     ) {
-      requiredPlaylist.videos.push(requiredVideo);
-      return await em.save(requiredPlaylist);
+      const isAlreadyPresent = requiredPlaylist?.videos.find(
+        (video) => video.videoId === requiredVideo?.videoId,
+      );
+      if (!isAlreadyPresent) {
+        requiredPlaylist.videos.push(requiredVideo);
+        return await em.save(requiredPlaylist);
+      } else {
+        throw new Error('Video Already Exists');
+      }
     }
 
     return requiredPlaylist;
@@ -134,20 +147,33 @@ export class PlaylistResolver {
     @Ctx() { em, req }: MyContext,
   ): Promise<Playlist | undefined> {
     const requiredPlaylist = await em.findOne(Playlist, {
-      playlistId: inputData.playlistId,
+      where: { playlistId: inputData.playlistId },
+      relations: ['user', 'videos'],
     });
 
-    const updatedVideos = requiredPlaylist?.videos.filter(
-      (video) => video.videoId !== inputData.videoId,
-    );
+    const requiredVideo = await em.findOne(Video, {
+      where: {
+        videoId: inputData.videoId,
+      },
+    });
 
     if (
       requiredPlaylist &&
-      updatedVideos &&
-      requiredPlaylist.user === req.session.userId
+      requiredVideo &&
+      requiredPlaylist.user.userId === req.session.userId
     ) {
-      requiredPlaylist.videos = updatedVideos;
-      return await em.save(requiredPlaylist);
+      const isPresent = requiredPlaylist?.videos.find(
+        (video) => video.videoId === requiredVideo?.videoId,
+      );
+      if (isPresent) {
+        const updatedVideos = requiredPlaylist?.videos.filter(
+          (video) => video.videoId !== inputData.videoId,
+        );
+        requiredPlaylist.videos = updatedVideos;
+        return await em.save(requiredPlaylist);
+      } else {
+        throw new Error('This video cannot be found in this playlist');
+      }
     }
 
     return requiredPlaylist;
@@ -156,22 +182,24 @@ export class PlaylistResolver {
   @Authorized('REGULAR')
   @Mutation(() => Playlist)
   async deletePlaylist(
-    @Arg('inputData') inputData: PlaylistOperationInput,
+    @Arg('playlistId') playlistId: string,
     @Ctx() { em, req }: MyContext,
-  ): Promise<Playlist | DeleteResult | undefined> {
+  ): Promise<Playlist> {
     const requiredPlaylist = await em.findOne(Playlist, {
-      playlistId: inputData.playlistId,
+      where: { playlistId },
+      relations: ['user'],
     });
 
     if (
       requiredPlaylist &&
       requiredPlaylist?.user.userId === req.session.userId
     ) {
-      return em.delete(Playlist, {
+      const result = await em.delete(Playlist, {
         playlistId: requiredPlaylist.playlistId,
       });
+      return requiredPlaylist;
+    } else {
+      throw new Error('You cannot perform this operation');
     }
-
-    return requiredPlaylist;
   }
 }
