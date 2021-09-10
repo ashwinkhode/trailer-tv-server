@@ -12,7 +12,7 @@ import {
 @ObjectType()
 @Entity()
 export class Video extends BaseEntity {
-  @Field()
+  @Field(() => String)
   @PrimaryGeneratedColumn('uuid')
   videoId!: string;
 

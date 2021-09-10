@@ -31,6 +31,7 @@ export class Playlist {
   @CreateDateColumn()
   createdAt: Date;
 
+  @Field(() => User)
   @ManyToOne(() => User, (user) => user.playlists)
   user: User;
 }
